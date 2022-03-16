@@ -48,9 +48,9 @@ void SPI_pclk_control(uint8_t SPIx, uint8_t enable_disable) {
     }
 }
 
-void SPI_init(uint8_t SPIx, SPI_config_t *pSPIConfig) {
-    if (SPIx == SPI0) {
-        SPI_pclk_control(SPIx, SPI_PCLK_ENABLE);
+void SPI_init(SPI_config_t *pSPIConfig) {
+    if (pSPIConfig->SPIx == SPI0) {
+        SPI_pclk_control(pSPIConfig->SPIx, SPI_PCLK_ENABLE);
 
         // configure PORTA2 and PORTA5 for SSI0 clock and Tx, respectively
         GPIO_PORTA_AMSEL_R &= ~0x24; // disable analog for these pins
@@ -150,34 +150,36 @@ void SPI_ss_control(uint8_t port, uint8_t pin, uint8_t high_low) {
     }
 }
 
-void SPI_write_char(uint8_t SPIx, SPI_config_t *pSPIConfig, char data, uint8_t ss_port, uint8_t ss_pin) {
+void SPI_write_byte(SPI_config_t *pSPIConfig, uint8_t data, uint8_t ss_port, uint8_t ss_pin, uint8_t release) {
     SPI_ss_control(ss_port, ss_pin, SPI_SS_LOW);
-    if (SPIx == SPI0) {
+    if (pSPIConfig->SPIx == SPI0) {
         while((SSI0_SR_R & 2) == 0); // wait until FIFO is not full
         SSI0_DR_R = data;
         while(SSI0_SR_R & 0x10); // wait until transmit is complete
     }
-    else if (SPIx == SPI1) {
+    else if (pSPIConfig->SPIx == SPI1) {
         while((SSI1_SR_R & 2) == 0); // wait until FIFO is not full
         SSI1_DR_R = data;
         while(SSI1_SR_R & 0x10); // wait until transmit is complete
     }
-    else if (SPIx == SPI2) {
+    else if (pSPIConfig->SPIx == SPI2) {
         while((SSI2_SR_R & 2) == 0); // wait until FIFO is not full
         SSI2_DR_R = data;
         while(SSI2_SR_R & 0x10); // wait until transmit is complete
     }
-    else if (SPIx == SPI3) {
+    else if (pSPIConfig->SPIx == SPI3) {
         while((SSI3_SR_R & 2) == 0); // wait until FIFO is not full
         SSI3_DR_R = data;
         while(SSI3_SR_R & 0x10); // wait until transmit is complete
     }
-    SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH);
+    if (release) {
+        SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH);
+    }
 }
 
-void SPI_write_string(uint8_t SPIx, SPI_config_t *pSPIConfig, char* data, uint8_t ss_port, uint8_t ss_pin) {
+void SPI_write_string(SPI_config_t *pSPIConfig, char* data, uint8_t ss_port, uint8_t ss_pin) {
     SPI_ss_control(ss_port, ss_pin, SPI_SS_LOW);
-    if (SPIx == SPI0) {
+    if (pSPIConfig->SPIx == SPI0) {
         while((SSI0_SR_R & 2) == 0); // wait until FIFO is not full
         uint8_t i;
         for(i = 0; data[i] != '\0'; i++) {
@@ -185,7 +187,7 @@ void SPI_write_string(uint8_t SPIx, SPI_config_t *pSPIConfig, char* data, uint8_
             while(SSI0_SR_R & 0x10); // wait until transmit is complete
         }
     }
-    else if (SPIx == SPI1) {
+    else if (pSPIConfig->SPIx == SPI1) {
         while((SSI1_SR_R & 2) == 0); // wait until FIFO is not full
         uint8_t i;
         for(i = 0; data[i] != '\0'; i++) {
@@ -193,7 +195,7 @@ void SPI_write_string(uint8_t SPIx, SPI_config_t *pSPIConfig, char* data, uint8_
             while(SSI1_SR_R & 0x10); // wait until transmit is complete
         }
     }
-    else if (SPIx == SPI2) {
+    else if (pSPIConfig->SPIx == SPI2) {
         while((SSI2_SR_R & 2) == 0); // wait until FIFO is not full
         uint8_t i;
         for(i = 0; data[i] != '\0'; i++) {
@@ -201,7 +203,7 @@ void SPI_write_string(uint8_t SPIx, SPI_config_t *pSPIConfig, char* data, uint8_
             while(SSI2_SR_R & 0x10); // wait until transmit is complete
         }
     }
-    else if (SPIx == SPI3) {
+    else if (pSPIConfig->SPIx == SPI3) {
         while((SSI3_SR_R & 2) == 0); // wait until FIFO is not full
         uint8_t i;
         for(i = 0; data[i] != '\0'; i++) {
