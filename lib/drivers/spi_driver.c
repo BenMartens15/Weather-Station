@@ -52,12 +52,12 @@ void SPI_init(SPI_config_t *pSPIConfig) {
     if (pSPIConfig->SPIx == SPI0) {
         SPI_pclk_control(pSPIConfig->SPIx, SPI_PCLK_ENABLE);
 
-        // configure PORTA2 and PORTA5 for SSI0 clock and Tx, respectively
-        GPIO_PORTA_AMSEL_R &= ~0x24; // disable analog for these pins
-        GPIO_PORTA_DEN_R |= 0x24; // make the pins digital
-        GPIO_PORTA_AFSEL_R |= 0x24; // enable alternate function
-        GPIO_PORTA_PCTL_R &= ~0x00F00F00; // assign pins to SSI
-        GPIO_PORTA_PCTL_R |= 0x00200200; // assign pins to SSI
+        // configure PORTA2, PORTA5, and PORTA4 for SSI0 clock, Tx, and Rx, respectively
+        GPIO_PORTA_AMSEL_R &= ~0x34; // disable analog for these pins
+        GPIO_PORTA_DEN_R |= 0x34; // make the pins digital
+        GPIO_PORTA_AFSEL_R |= 0x34; // enable alternate function
+        GPIO_PORTA_PCTL_R &= ~0x00FF0F00; // assign pins to SSI0
+        GPIO_PORTA_PCTL_R |= 0x00220200; // assign pins to SSI0
 
         SSI0_CR1_R |= pSPIConfig->SPI_device_mode << 2; // disable SSI and set the SPI mode
         SSI0_CC_R = 0; // use the system clock
@@ -280,10 +280,23 @@ void SPI_write_string(SPI_config_t *pSPIConfig, char* data, uint8_t ss_port, uin
     SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH);
 }
 
+void SPI_read_byte(SPI_config_t *pSPIConfig, uint8_t* read_buffer, uint8_t ss_port, uint8_t ss_pin, uint8_t release) {
+    SPI_ss_control(ss_port, ss_pin, SPI_SS_LOW);
+    if (pSPIConfig->SPIx == SPI0) {
+        while(SSI0_SR_R & 3 == 0); // wait until FIFO is not empty
+        *read_buffer = SSI0_DR_R;
+        while(SSI0_SR_R & 0x10); // wait until receive is complete
+    }
+
+
+    if (release) {
+        SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH);
+    }
+}
+
 void SPI_delay(uint16_t time_ms) {
     uint16_t i, j;
     for(i = 0 ; i < time_ms; i++)
         for(j = 0; j < 3180; j++)
             {}  /* execute NOP for 1ms */
 }
-
