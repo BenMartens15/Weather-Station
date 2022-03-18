@@ -5,8 +5,26 @@
  *      Author: ben
  */
 
-int main() {
+#include "repo/lib/drivers/i2c_driver.h"
 
+#define SLAVE_ADDR 0x68
+
+void delay_ms(int time_ms);
+
+int main() {
+    I2C_config_t I2C_test;
+    I2C_test.I2Cx = I2C2;
+    I2C_test.I2C_speed = I2C_speed_standard;
+
+    I2C_init(&I2C_test);
+    delay_ms(1000);
+    I2C_master_send_data(I2C_test.I2Cx, SLAVE_ADDR, 'B');
 }
 
-
+void delay_ms(int time_ms)
+{
+    int i, j;
+    for(i = 0 ; i < time_ms; i++)
+        for(j = 0; j < 3180; j++)
+            {}  /* execute NOP for 1ms */
+}
