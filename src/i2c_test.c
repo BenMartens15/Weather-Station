@@ -13,7 +13,7 @@ void delay_ms(int time_ms);
 
 int main() {
     I2C_config_t I2C_test;
-    I2C_test.I2Cx = I2C2;
+    I2C_test.I2Cx = I2C1;
     I2C_test.I2C_speed = I2C_speed_standard;
 
     I2C_init(&I2C_test);

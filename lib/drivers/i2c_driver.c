@@ -7,7 +7,7 @@
 
 #include "i2c_driver.h"
 
-static int I2C_wait(uint8_t I2Cx) {
+static int I2C_wait_busy(uint8_t I2Cx) {
     if (I2Cx == I2C0) {
         while(I2C0_MCS_R & 1); // wait until master is not busy
         return I2C0_MCS_R & 0xE;
@@ -114,8 +114,9 @@ uint8_t I2C_master_send_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
     if (I2Cx == I2C0) {
         I2C0_MSA_R = slave_addr << 1;
         I2C0_MDR_R = data;
+        while(I2C0_MCS_R & 7); // wait until the I2C bus is not busy
         I2C0_MCS_R = 0x07; // initiate a single byte transmit of data
-        error = I2C_wait(I2Cx);
+        error = I2C_wait_busy(I2Cx);
         if(error) {
             return error;
         }
@@ -124,8 +125,9 @@ uint8_t I2C_master_send_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
     else if (I2Cx == I2C1) {
         I2C1_MSA_R = slave_addr << 1;
         I2C1_MDR_R = data;
+        while(I2C1_MCS_R & 7); // wait until the I2C bus is not busy
         I2C1_MCS_R = 0x07; // initiate a single byte transmit of data
-        error = I2C_wait(I2Cx);
+        error = I2C_wait_busy(I2Cx);
         if(error) {
             return error;
         }
@@ -134,8 +136,9 @@ uint8_t I2C_master_send_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
     else if (I2Cx == I2C2) {
         I2C2_MSA_R = slave_addr << 1;
         I2C2_MDR_R = data;
+        while(I2C2_MCS_R & 7); // wait until the I2C bus is not busy
         I2C2_MCS_R = 0x07; // initiate a single byte transmit of data
-        error = I2C_wait(I2Cx);
+        error = I2C_wait_busy(I2Cx);
         if(error) {
             return error;
         }
@@ -144,8 +147,9 @@ uint8_t I2C_master_send_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
     else if (I2Cx == I2C3) {
         I2C3_MSA_R = slave_addr << 1;
         I2C3_MDR_R = data;
+        while(I2C3_MCS_R & 7); // wait until the I2C bus is not busy
         I2C3_MCS_R = 0x07; // initiate a single byte transmit of data
-        error = I2C_wait(I2Cx);
+        error = I2C_wait_busy(I2Cx);
         if(error) {
             return error;
         }
