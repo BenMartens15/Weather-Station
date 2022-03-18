@@ -8,17 +8,27 @@
 #include "repo/lib/drivers/i2c_driver.h"
 
 #define SLAVE_ADDR 0x68
+#define COMMAND_GET_LEN     0x51
+#define COMMAND_READ_DATA   0x52
 
 void delay_ms(int time_ms);
 
 int main() {
+    uint8_t data_len;
+
     I2C_config_t I2C_test;
-    I2C_test.I2Cx = I2C1;
+    I2C_test.I2Cx = I2C0;
     I2C_test.I2C_speed = I2C_speed_standard;
 
     I2C_init(&I2C_test);
     delay_ms(1000);
-    I2C_master_send_data(I2C_test.I2Cx, SLAVE_ADDR, 'B');
+    I2C_master_send_data(I2C_test.I2Cx, SLAVE_ADDR, COMMAND_GET_LEN);
+    I2C_master_receive_data(I2C_test.I2Cx, SLAVE_ADDR, &data_len);
+
+    uint8_t data_buffer[32];
+    I2C_master_send_data(I2C_test.I2Cx, SLAVE_ADDR, COMMAND_READ_DATA);
+    I2C_master_receive_data(I2C_test.I2Cx, SLAVE_ADDR, data_buffer);
+    delay_ms(1000);
 }
 
 void delay_ms(int time_ms)

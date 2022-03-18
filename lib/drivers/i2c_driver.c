@@ -157,3 +157,20 @@ uint8_t I2C_master_send_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
     }
     return 0;
 }
+
+uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* receive_buffer) {
+    uint8_t error;
+    if (I2Cx == I2C0) {
+        I2C0_MSA_R |= (1 << 0); // set the R/S bit to 1 (receive)
+        I2C0_MSA_R |= slave_addr << 1;
+        while(I2C0_MCS_R & 7); // wait until the I2C bus is not busy
+        I2C0_MCS_R = 0x07; // initiate a single byte transmit of data
+        error = I2C_wait_busy(I2Cx);
+        if (error) {
+            return error;
+        }
+        *receive_buffer = I2C0_MDR_R;
+        return 0;
+    }
+    return 0;
+}

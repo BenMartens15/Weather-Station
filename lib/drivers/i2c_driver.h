@@ -20,6 +20,7 @@ void I2C_pclk_control(uint8_t I2Cx, uint8_t enable_disable);
 void I2C_init(I2C_config_t *pI2CConfig);
 
 uint8_t I2C_master_send_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t data);
+uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* receive_buffer);
 
 #define I2C_PCLK_ENABLE     1
 #define I2C_PCLK_DISABLE    0
