@@ -11,6 +11,7 @@
 #include "repo/lib/drivers/i2c_driver.h"
 
 void temp_sensor_init(uint8_t I2Cx);
+void temp_sensor_measure(uint32_t* measurements);
 
 
 #endif /* REPO_LIB_TEMP_HUMIDITY_SENSOR_TEMP_HUMIDITY_SENSOR_H_ */
