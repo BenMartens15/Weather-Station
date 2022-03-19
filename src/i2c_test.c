@@ -14,7 +14,7 @@
 void delay_ms(int time_ms);
 
 int main() {
-    uint8_t command[] = {'D', 'u', 'd', 'e'};
+    uint8_t data_received[32];
 
     I2C_config_t I2C_test;
     I2C_test.I2Cx = I2C0;
@@ -22,7 +22,8 @@ int main() {
 
     I2C_init(&I2C_test);
     delay_ms(1000);
-    I2C_master_send_data(I2C_test.I2Cx, SLAVE_ADDR, command, 4);
+    I2C_master_send_byte(I2C_test.I2Cx, SLAVE_ADDR, 0x52);
+    I2C_master_receive_data(I2C_test.I2Cx, SLAVE_ADDR, data_received, 22);
 
 }
 
