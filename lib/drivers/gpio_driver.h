@@ -22,13 +22,21 @@ void GPIO_pclk_control(uint8_t GPIOx, uint8_t enable_disable);
 void GPIO_init(GPIO_config_t *pGPIOConfig);
 
 uint8_t GPIO_read_pin(GPIO_config_t *pGPIOConfig);
-uint8_t GPIO_write_pin(GPIO_config_t *pGPIOConfig, uint8_t high_low);
+void GPIO_write_pin(GPIO_config_t *pGPIOConfig, uint8_t high_low);
+
+void GPIO_interrupt_config(GPIO_config_t *pGPIConfig, uint8_t edge_level_sensitive, uint8_t edge_level_trigger);
 
 #define GPIO_PCLK_ENABLE    1
 #define GPIO_PCLK_DISABLE   0
 
 #define GPIO_PIN_HIGH       1
 #define GPIO_PIN_LOW        0
+
+#define GPIO_EDGE_SENSITIVE     0
+#define GPIO_LEVEL_SENSITIVE    1
+
+#define GPIO_LOW_FALLING_TRIGGER    0
+#define GPIO_HIGH_RISING_TRIGGER    1
 
 /*
  * @GPIOx

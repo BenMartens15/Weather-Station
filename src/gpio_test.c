@@ -30,13 +30,31 @@ int main() {
 
     GPIO_init(&GPIOF2);
     GPIO_init(&GPIOF4);
+    GPIO_interrupt_config(&GPIOF4, GPIO_LEVEL_SENSITIVE, GPIO_LOW_FALLING_TRIGGER);
 
-    while(1) {
-        if (GPIO_read_pin(&GPIOF4) == GPIO_PIN_LOW) {
-            GPIO_write_pin(&GPIOF2, GPIO_PIN_HIGH);
-        }
-        else {
-            GPIO_write_pin(&GPIOF2, GPIO_PIN_LOW);
-        }
-    }
+    while(1);
+}
+
+void GPIO_porta_handler() {
+
+}
+
+void GPIO_portb_handler() {
+
+}
+
+void GPIO_portc_handler() {
+
+}
+
+void GPIO_portd_handler() {
+
+}
+
+void GPIO_porte_handler() {
+
+}
+
+void GPIO_portf_handler() {
+
 }
