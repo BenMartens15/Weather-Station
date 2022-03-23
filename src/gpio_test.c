@@ -35,26 +35,3 @@ int main() {
     while(1);
 }
 
-void GPIO_porta_handler() {
-
-}
-
-void GPIO_portb_handler() {
-
-}
-
-void GPIO_portc_handler() {
-
-}
-
-void GPIO_portd_handler() {
-
-}
-
-void GPIO_porte_handler() {
-
-}
-
-void GPIO_portf_handler() {
-
-}
