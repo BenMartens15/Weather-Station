@@ -185,22 +185,22 @@ void GPIO_init(GPIO_config_t *pGPIOConfig) {
 uint8_t GPIO_read_pin(GPIO_config_t *pGPIOConfig) {
     uint8_t value;
     if (pGPIOConfig->GPIOx == GPIOA) {
-        value = (GPIO_PORTA_DATA_R >> pGPIOConfig->GPIO_pin_num);
+        value = (GPIO_PORTA_DATA_R >> pGPIOConfig->GPIO_pin_num) & 1;
     }
     else if (pGPIOConfig->GPIOx == GPIOB) {
-        value = (GPIO_PORTB_DATA_R >> pGPIOConfig->GPIO_pin_num);
+        value = (GPIO_PORTB_DATA_R >> pGPIOConfig->GPIO_pin_num) & 1;
     }
     else if (pGPIOConfig->GPIOx == GPIOC) {
-        value = (GPIO_PORTC_DATA_R >> pGPIOConfig->GPIO_pin_num);
+        value = (GPIO_PORTC_DATA_R >> pGPIOConfig->GPIO_pin_num) & 1;
     }
     else if (pGPIOConfig->GPIOx == GPIOD) {
-        value = (GPIO_PORTD_DATA_R >> pGPIOConfig->GPIO_pin_num);
+        value = (GPIO_PORTD_DATA_R >> pGPIOConfig->GPIO_pin_num) & 1;
     }
     else if (pGPIOConfig->GPIOx == GPIOE) {
-        value = (GPIO_PORTE_DATA_R >> pGPIOConfig->GPIO_pin_num);
+        value = (GPIO_PORTE_DATA_R >> pGPIOConfig->GPIO_pin_num) & 1;
     }
     else if (pGPIOConfig->GPIOx == GPIOF) {
-        value = (GPIO_PORTF_DATA_R >> pGPIOConfig->GPIO_pin_num);
+        value = (GPIO_PORTF_DATA_R >> pGPIOConfig->GPIO_pin_num) & 1;
     }
     return value;
 }
