@@ -82,6 +82,11 @@ uint8_t keypad_check_key() {
         GPIO_write_pin(&keypad_rows, GPIO_PIN_HIGH);
     }
 
+    for (test_row = 0; test_row < 4; test_row++) { // make each row low again
+        keypad_rows.GPIO_pin_num = row_pins[test_row];
+        GPIO_write_pin(&keypad_rows, GPIO_PIN_LOW);
+    }
+
     if (row_pressed == 0) {
         if (column_pressed == 0) {
             return 1;
