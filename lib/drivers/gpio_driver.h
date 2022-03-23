@@ -78,6 +78,7 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIConfig, uint8_t edge_level_sensiti
 #define GPIO_PIN_PU         0 // pull-up resistor
 #define GPIO_PIN_PD         1 // pull-down resistor
 #define GPIO_PIN_OD         2 // open drain
+#define GPIO_PIN_NO_PUPD    3
 
 
 #endif /* REPO_LIB_DRIVERS_GPIO_DRIVER_H_ */
