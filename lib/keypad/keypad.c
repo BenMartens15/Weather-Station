@@ -16,6 +16,13 @@ static uint8_t row_port;
 static uint8_t row_pins[4];
 uint8_t keypad_key_pressed;
 
+static void debounce() { // delay for 10ms to debounce the keypad buttons
+    int i, j;
+    for(i = 0 ; i < 10; i++)
+        for(j = 0; j < 3180; j++)
+            {}  /* execute NOP for 1ms */
+}
+
 void keypad_init(uint8_t c_port, uint8_t r_port, uint8_t* c_pins, uint8_t* r_pins) {
     column_port = c_port;
     memcpy(column_pins, c_pins, sizeof(column_pins));
@@ -65,6 +72,7 @@ uint8_t keypad_check_key() {
     uint8_t row_pressed;
     uint8_t column_pressed;
     uint8_t test_row;
+    debounce();
     for (test_row = 0; test_row < 4; test_row++) { // make each row high
         keypad_rows.GPIO_pin_num = row_pins[test_row];
         GPIO_write_pin(&keypad_rows, GPIO_PIN_HIGH);
