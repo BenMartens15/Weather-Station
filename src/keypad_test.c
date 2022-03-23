@@ -27,36 +27,3 @@ int main() {
     while(1);
 }
 
-void GPIO_porta_handler() {
-    uint8_t keypressed = keypad_check_key();
-    GPIO_config_t led;
-    led.GPIOx = GPIOF;
-    led.GPIO_pin_num = 2;
-    led.GPIO_pin_dir = GPIO_OUT;
-    led.GPIO_pu_pd = GPIO_PIN_NO_PUPD;
-    GPIO_init(&led);
-    GPIO_write_pin(&led, GPIO_PIN_HIGH);
-    delay_ms(1000);
-    GPIO_write_pin(&led, GPIO_PIN_LOW);
-    GPIO_PORTA_ICR_R |= 0x1C;
-}
-
-void GPIO_portb_handler() {
-    keypad_check_key();
-}
-
-void GPIO_portc_handler() {
-    keypad_check_key();
-}
-
-void GPIO_portd_handler() {
-    keypad_check_key();
-}
-
-void GPIO_porte_handler() {
-    keypad_check_key();
-}
-
-void GPIO_portf_handler() {
-    keypad_check_key();
-}

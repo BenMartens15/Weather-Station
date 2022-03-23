@@ -14,6 +14,7 @@ static uint8_t column_port;
 static uint8_t column_pins[3];
 static uint8_t row_port;
 static uint8_t row_pins[4];
+uint8_t keypad_key_pressed;
 
 void keypad_init(uint8_t c_port, uint8_t r_port, uint8_t* c_pins, uint8_t* r_pins) {
     column_port = c_port;
@@ -132,4 +133,49 @@ uint8_t keypad_check_key() {
         }
     }
     return 13;
+}
+
+/*
+ * GPIO interrupt handlers
+ */
+void GPIO_porta_handler() {
+    keypad_key_pressed = keypad_check_key();
+    GPIO_PORTA_ICR_R |= (1 << column_pins[0]);
+    GPIO_PORTA_ICR_R |= (1 << column_pins[1]);
+    GPIO_PORTA_ICR_R |= (1 << column_pins[2]);
+}
+
+void GPIO_portb_handler() {
+    keypad_key_pressed = keypad_check_key();
+    GPIO_PORTB_ICR_R |= (1 << column_pins[0]);
+    GPIO_PORTB_ICR_R |= (1 << column_pins[1]);
+    GPIO_PORTB_ICR_R |= (1 << column_pins[2]);
+}
+
+void GPIO_portc_handler() {
+    keypad_key_pressed = keypad_check_key();
+    GPIO_PORTC_ICR_R |= (1 << column_pins[0]);
+    GPIO_PORTC_ICR_R |= (1 << column_pins[1]);
+    GPIO_PORTC_ICR_R |= (1 << column_pins[2]);
+}
+
+void GPIO_portd_handler() {
+    keypad_key_pressed = keypad_check_key();
+    GPIO_PORTD_ICR_R |= (1 << column_pins[0]);
+    GPIO_PORTD_ICR_R |= (1 << column_pins[1]);
+    GPIO_PORTD_ICR_R |= (1 << column_pins[2]);
+}
+
+void GPIO_porte_handler() {
+    keypad_key_pressed = keypad_check_key();
+    GPIO_PORTE_ICR_R |= (1 << column_pins[0]);
+    GPIO_PORTE_ICR_R |= (1 << column_pins[1]);
+    GPIO_PORTE_ICR_R |= (1 << column_pins[2]);
+}
+
+void GPIO_portf_handler() {
+    keypad_key_pressed = keypad_check_key();
+    GPIO_PORTF_ICR_R |= (1 << column_pins[0]);
+    GPIO_PORTF_ICR_R |= (1 << column_pins[1]);
+    GPIO_PORTF_ICR_R |= (1 << column_pins[2]);
 }
