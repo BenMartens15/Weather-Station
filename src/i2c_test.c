@@ -5,32 +5,26 @@
  *      Author: ben
  */
 
-#include "repo/lib/drivers/i2c_driver.h"
+#include "repo/lib/temp_humidity_sensor/temp_humidity_sensor.h"
 
-#define SLAVE_ADDR 0x68
-#define COMMAND_GET_LEN     0x51
-#define COMMAND_READ_DATA   0x52
-
-void delay_ms(int time_ms);
-
-int main() {
-    uint8_t data_received[32];
-
-    I2C_config_t I2C_test;
-    I2C_test.I2Cx = I2C0;
-    I2C_test.I2C_speed = I2C_speed_standard;
-
-    I2C_init(&I2C_test);
-    delay_ms(1000);
-    I2C_master_send_byte(I2C_test.I2Cx, SLAVE_ADDR, 0x52);
-    I2C_master_receive_data(I2C_test.I2Cx, SLAVE_ADDR, data_received, 22);
-
-}
-
-void delay_ms(int time_ms)
-{
+void delay(int time_ms) {
     int i, j;
     for(i = 0 ; i < time_ms; i++)
         for(j = 0; j < 3180; j++)
             {}  /* execute NOP for 1ms */
 }
+
+int main() {
+    uint32_t temp_humidity[2];
+    uint32_t integers[2]; // the integer portions of the readings
+    uint32_t decimals[2]; // the decimal portions of the readings
+
+    delay(1000);
+    temp_sensor_init(I2C1);
+    while(1) {
+        temp_sensor_measure(temp_humidity);
+        temp_sensor_to_decimal(temp_humidity, integers, decimals);
+        delay(3000);
+    }
+}
+
