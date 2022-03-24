@@ -30,20 +30,20 @@ void SPI_pclk_control(uint8_t SPIx, uint8_t enable_disable) {
     }
     else {
         if (SPIx == SPI0) {
-            SYSCTL_RCGCSSI_R &= ~(1 << 0); // enable SSI0 clock
-            SYSCTL_RCGCGPIO_R &= ~(1 << 0); // enable clock to GPIOA for SSI0
+            SYSCTL_RCGCSSI_R &= ~(1 << 0); // disable SSI0 clock
+            SYSCTL_RCGCGPIO_R &= ~(1 << 0); // disable clock to GPIOA for SSI0
         }
         else if(SPIx == SPI1) {
-            SYSCTL_RCGCSSI_R &= ~(1 << 1); // enable SSI1 clock
-            SYSCTL_RCGCGPIO_R &= ~(1 << 5); // enable clock to GPIOF for SSI1
+            SYSCTL_RCGCSSI_R &= ~(1 << 1); // disable SSI1 clock
+            SYSCTL_RCGCGPIO_R &= ~(1 << 5); // disable clock to GPIOF for SSI1
         }
         else if(SPIx == SPI2) {
-            SYSCTL_RCGCSSI_R &= ~(1 << 2); // enable SSI2 clock
-            SYSCTL_RCGCGPIO_R &= ~(1 << 1); // enable clock to GPIOB for SSI2
+            SYSCTL_RCGCSSI_R &= ~(1 << 2); // disable SSI2 clock
+            SYSCTL_RCGCGPIO_R &= ~(1 << 1); // disable clock to GPIOB for SSI2
         }
         else if(SPIx == SPI3) {
-            SYSCTL_RCGCSSI_R &= ~(1 << 3); // enable SSI3 clock
-            SYSCTL_RCGCGPIO_R &= ~(1 << 3); // enable clock to GPIOD for SSI3
+            SYSCTL_RCGCSSI_R &= ~(1 << 3); // disable SSI3 clock
+            SYSCTL_RCGCGPIO_R &= ~(1 << 3); // disable clock to GPIOD for SSI3
         }
     }
 }
@@ -56,8 +56,8 @@ void SPI_init(SPI_config_t *pSPIConfig) {
         GPIO_PORTA_AMSEL_R &= ~0x24; // disable analog for these pins
         GPIO_PORTA_DEN_R |= 0x24; // make the pins digital
         GPIO_PORTA_AFSEL_R |= 0x24; // enable alternate function
-        GPIO_PORTA_PCTL_R &= ~0x00F00F00; // assign pins to SSI0
-        GPIO_PORTA_PCTL_R |= 0x00200200; // assign pins to SSI0
+        GPIO_PORTA_PCTL_R &= ~0x00F00F00; // assign pins to SSI
+        GPIO_PORTA_PCTL_R |= 0x00200200; // assign pins to SSI
 
         SSI0_CR1_R |= pSPIConfig->SPI_device_mode << 2; // disable SSI and set the SPI mode
         SSI0_CC_R = 0; // use the system clock
@@ -70,6 +70,72 @@ void SPI_init(SPI_config_t *pSPIConfig) {
         SSI0_CR0_R = temp;
 
         SSI0_CR1_R |= (1 << 1); // enable SPI
+    }
+    else if (pSPIConfig->SPIx == SPI1) {
+        SPI_pclk_control(pSPIConfig->SPIx, SPI_PCLK_ENABLE);
+
+        // configure PORTF2 and PORTF1 for SSI1 clock and Tx, respectively
+        GPIO_PORTF_AMSEL_R &= ~0x06; // disable analog for these pins
+        GPIO_PORTF_DEN_R |= 0x06; // make the pins digital
+        GPIO_PORTF_AFSEL_R |= 0x06; // enable alternate function
+        GPIO_PORTF_PCTL_R &= ~0x00000FF0; // assign pins to SSI
+        GPIO_PORTF_PCTL_R |= 0x00000220; // assign pins to SSI
+
+        SSI1_CR1_R |= pSPIConfig->SPI_device_mode << 2; // disable SSI and set the SPI mode
+        SSI1_CC_R = 0; // use the system clock
+        SSI1_CPSR_R = pSPIConfig->SPI_speed;
+
+        uint32_t temp = 0;
+        temp |= pSPIConfig->SPI_dss;
+        temp |= pSPIConfig->SPI_cpol << 6;
+        temp |= pSPIConfig->SPI_cpha << 7;
+        SSI1_CR0_R = temp;
+
+        SSI1_CR1_R |= (1 << 1); // enable SPI
+    }
+    else if (pSPIConfig->SPIx == SPI2) {
+        SPI_pclk_control(pSPIConfig->SPIx, SPI_PCLK_ENABLE);
+
+        // configure PORTB4 and PORTB7 for SSI2 clock and Tx, respectively
+        GPIO_PORTB_AMSEL_R &= ~0x90; // disable analog for these pins
+        GPIO_PORTB_DEN_R |= 0x90; // make the pins digital
+        GPIO_PORTB_AFSEL_R |= 0x90; // enable alternate function
+        GPIO_PORTB_PCTL_R &= ~0xF00F0000; // assign pins to SSI
+        GPIO_PORTB_PCTL_R |= 0x20020000; // assign pins to SSI
+
+        SSI2_CR1_R |= pSPIConfig->SPI_device_mode << 2; // disable SSI and set the SPI mode
+        SSI2_CC_R = 0; // use the system clock
+        SSI2_CPSR_R = pSPIConfig->SPI_speed;
+
+        uint32_t temp = 0;
+        temp |= pSPIConfig->SPI_dss;
+        temp |= pSPIConfig->SPI_cpol << 6;
+        temp |= pSPIConfig->SPI_cpha << 7;
+        SSI2_CR0_R = temp;
+
+        SSI2_CR1_R |= (1 << 1); // enable SPI
+    }
+    else if (pSPIConfig->SPIx == SPI3) {
+        SPI_pclk_control(pSPIConfig->SPIx, SPI_PCLK_ENABLE);
+
+        // configure PORTD0 and PORTD3 for SSI3 clock and Tx, respectively
+        GPIO_PORTD_AMSEL_R &= ~0x09; // disable analog for these pins
+        GPIO_PORTD_DEN_R |= 0x09; // make the pins digital
+        GPIO_PORTD_AFSEL_R |= 0x09; // enable alternate function
+        GPIO_PORTD_PCTL_R &= ~0x0000F00F; // assign pins to SSI
+        GPIO_PORTD_PCTL_R |= 0x00001001; // assign pins to SSI
+
+        SSI3_CR1_R |= pSPIConfig->SPI_device_mode << 2; // disable SSI and set the SPI mode
+        SSI3_CC_R = 0; // use the system clock
+        SSI3_CPSR_R = pSPIConfig->SPI_speed;
+
+        uint32_t temp = 0;
+        temp |= pSPIConfig->SPI_dss;
+        temp |= pSPIConfig->SPI_cpol << 6;
+        temp |= pSPIConfig->SPI_cpha << 7;
+        SSI3_CR0_R = temp;
+
+        SSI3_CR1_R |= (1 << 1); // enable SPI
     }
 }
 
