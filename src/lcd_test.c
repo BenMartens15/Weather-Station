@@ -12,14 +12,14 @@ int main() {
     LCD_init(SPI3, SPI_SS_PORT_D, SPI_SS_PIN_1);
     SPI_delay(1000);
     LCD_write_setting('-');
-    LCD_move_cursor(0, 5);
-    LCD_display_string("12:34am");
-    LCD_move_cursor(1, 0);
-    LCD_display_string("Temp: 22.7 C");
-    SPI_delay(5000);
-    LCD_move_cursor(0, 5);
-    LCD_display_string("12:35am");
-    SPI_delay(250);
+    LCD_write_setting('/'); // disable system messages
+    LCD_change_backlight('r');
+    SPI_delay(1000);
+    LCD_change_backlight('g');
+    SPI_delay(1000);
+    LCD_change_backlight('b');
+    SPI_delay(1000);
+    LCD_change_backlight('w');
 }
 
 

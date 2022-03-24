@@ -37,13 +37,36 @@ void LCD_display_string(char* string_to_display) {
 }
 
 void LCD_move_cursor(uint8_t line, uint8_t position) {
-    uint8_t commands[3] = {254, 0, '\0'};
-    uint8_t position_command = 128;
+    char commands[3] = {254, 0, '\0'};
+    char position_command = 128;
     if (line != 0) {
         position_command += 64;
     }
     position_command += position;
     commands [1] = position_command;
     SPI_write_string(&lcd, commands, lcd_ss_port, lcd_ss_pin);
+}
+
+void LCD_change_backlight(uint8_t color) {
+    if (color == 'r') {
+        LCD_write_setting(157);
+        LCD_write_setting(158);
+        LCD_write_setting(188);
+    }
+    else if (color == 'g') {
+        LCD_write_setting(128);
+        LCD_write_setting(187);
+        LCD_write_setting(188);
+    }
+    else if (color == 'b') {
+        LCD_write_setting(128);
+        LCD_write_setting(158);
+        LCD_write_setting(217);
+    }
+    else if (color == 'w') { // white
+        LCD_write_setting(157);
+        LCD_write_setting(187);
+        LCD_write_setting(217);
+    }
 }
 
