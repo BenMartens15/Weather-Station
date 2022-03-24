@@ -70,3 +70,7 @@ void LCD_change_backlight(uint8_t color) {
     }
 }
 
+void LCD_clear() {
+    LCD_write_setting('-');
+}
+
