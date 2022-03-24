@@ -100,4 +100,11 @@ void temp_sensor_measure(uint32_t* measurements) {
     measurements[1] = temperature;
 }
 
+void temp_sensor_to_decimal(uint32_t* times_ten, uint32_t* integer, uint32_t* decimal) {
+    decimal[0] = times_ten[0] % 10; // the decimal portion of the humidity
+    decimal[1] = times_ten[1] % 10; // the decimal portion of the temperature
+    integer[0] = (times_ten[0] - decimal[0]) / 10; // the decimal portion of the humidity
+    integer[1] = (times_ten[1] - decimal[1]) / 10; // the decimal portion of the temperature
+}
+
 

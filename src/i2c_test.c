@@ -16,11 +16,14 @@ void delay(int time_ms) {
 
 int main() {
     uint32_t temp_humidity[2];
+    uint32_t integers[2]; // the integer portions of the readings
+    uint32_t decimals[2]; // the decimal portions of the readings
 
     delay(1000);
-    temp_sensor_init(I2C0);
+    temp_sensor_init(I2C1);
     while(1) {
         temp_sensor_measure(temp_humidity);
+        temp_sensor_to_decimal(temp_humidity, integers, decimals);
         delay(3000);
     }
 }
