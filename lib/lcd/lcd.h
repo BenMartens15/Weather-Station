@@ -11,8 +11,9 @@
 #include <stdint.h>
 #include "repo/lib/drivers/spi_driver.h"
 
-void LCD_init(uint8_t SPIx);
-void LCD_display_char(uint8_t character_to_display);
-void LCD_display(uint8_t* string_to_display);
+void LCD_init(uint8_t SPIx, uint8_t ss_port, uint8_t ss_pin);
+void LCD_write_setting(uint8_t command);
+void LCD_display_string(char* string_to_display);
+void LCD_move_cursor(uint8_t line, uint8_t position);
 
 #endif /* REPO_LIB_LCD_LCD_H_ */

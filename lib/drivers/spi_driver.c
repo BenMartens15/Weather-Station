@@ -280,4 +280,10 @@ void SPI_write_string(SPI_config_t *pSPIConfig, char* data, uint8_t ss_port, uin
     SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH);
 }
 
+void SPI_delay(uint16_t time_ms) {
+    uint16_t i, j;
+    for(i = 0 ; i < time_ms; i++)
+        for(j = 0; j < 3180; j++)
+            {}  /* execute NOP for 1ms */
+}
 
