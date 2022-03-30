@@ -62,17 +62,7 @@ int main() {
             LCD_clear();
             LCD_display_string(display_output);
         }
-        else if(get_keypad_key_pressed() == 13) {
-            LCD_move_cursor(0, 0);
-            LCD_clear();
-            LCD_display_string("No key pressed");
-        }
-        else {
-            LCD_move_cursor(0, 0);
-            LCD_clear();
-            LCD_display_string("Not 1, 2, or 3");
-        }
-        delay_ms(1000);
+        delay_ms(250);
     }
 }
 

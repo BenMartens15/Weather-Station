@@ -23,6 +23,13 @@ static void debounce() { // delay to debounce the keypad buttons
             {}  /* execute NOP for 1ms */
 }
 
+static void delay_ms(uint16_t time_ms) {
+    uint16_t i, j;
+    for(i = 0 ; i < time_ms; i++)
+        for(j = 0; j < 3180; j++)
+            {}  /* execute NOP for 1ms */
+}
+
 uint8_t get_keypad_key_pressed() {
     return keypad_key_pressed;
 }
@@ -76,6 +83,8 @@ uint8_t keypad_check_key() {
     uint8_t row_pressed = 5; // not initializing these was making the condition of row_pressed == 0 and column_pressed == 0 evaluate to true
     uint8_t column_pressed = 5;
     uint8_t test_row;
+
+    debounce();
     for (test_row = 0; test_row < 4; test_row++) { // make each row high
         keypad_rows.GPIO_pin_num = row_pins[test_row];
         GPIO_write_pin(&keypad_rows, GPIO_PIN_HIGH);
@@ -99,7 +108,7 @@ uint8_t keypad_check_key() {
         GPIO_write_pin(&keypad_rows, GPIO_PIN_LOW);
     }
 
-    debounce();
+    delay_ms(50);
     if (row_pressed == 0) {
         if (column_pressed == 0) {
             return 1;

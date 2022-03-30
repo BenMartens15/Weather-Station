@@ -424,4 +424,3 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
     }
     return 0;
 }
-
