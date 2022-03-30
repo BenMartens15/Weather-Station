@@ -19,8 +19,8 @@ void delay_ms(uint16_t time_ms) {
 }
 
 int main() {
-    uint8_t keypad_column_pins[] = {GPIO_PIN_NUM_3, GPIO_PIN_NUM_4, GPIO_PIN_NUM_2};
-    uint8_t keypad_row_pins[] = {GPIO_PIN_NUM_4, GPIO_PIN_NUM_7, GPIO_PIN_NUM_6, GPIO_PIN_NUM_5};
+    uint8_t keypad_column_pins[] = {GPIO_PIN_NUM_3, GPIO_PIN_NUM_2, GPIO_PIN_NUM_4};
+    uint8_t keypad_row_pins[] = {GPIO_PIN_NUM_7, GPIO_PIN_NUM_4, GPIO_PIN_NUM_5, GPIO_PIN_NUM_6};
 
     LCD_init(SPI3, SPI_SS_PORT_E, SPI_SS_PIN_1);
     temp_sensor_init(I2C1);
@@ -61,6 +61,16 @@ int main() {
             LCD_move_cursor(0, 0);
             LCD_clear();
             LCD_display_string(display_output);
+        }
+        else if(get_keypad_key_pressed() == 13) {
+            LCD_move_cursor(0, 0);
+            LCD_clear();
+            LCD_display_string("No key pressed");
+        }
+        else {
+            LCD_move_cursor(0, 0);
+            LCD_clear();
+            LCD_display_string("Not 1, 2, or 3");
         }
         delay_ms(1000);
     }
