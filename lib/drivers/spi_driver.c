@@ -74,12 +74,12 @@ void SPI_init(SPI_config_t *pSPIConfig) {
     else if (pSPIConfig->SPIx == SPI1) {
         SPI_pclk_control(pSPIConfig->SPIx, SPI_PCLK_ENABLE);
 
-        // configure PORTF2 and PORTF1 for SSI1 clock and Tx, respectively
-        GPIO_PORTF_AMSEL_R &= ~0x06; // disable analog for these pins
-        GPIO_PORTF_DEN_R |= 0x06; // make the pins digital
-        GPIO_PORTF_AFSEL_R |= 0x06; // enable alternate function
-        GPIO_PORTF_PCTL_R &= ~0x00000FF0; // assign pins to SSI
-        GPIO_PORTF_PCTL_R |= 0x00000220; // assign pins to SSI
+        // configure PORTF2, PORTF1, and PORTF0 for SSI1 clock, Tx, and Rx, respectively
+        GPIO_PORTF_AMSEL_R &= ~0x07; // disable analog for these pins
+        GPIO_PORTF_DEN_R |= 0x07; // make the pins digital
+        GPIO_PORTF_AFSEL_R |= 0x07; // enable alternate function
+        GPIO_PORTF_PCTL_R &= ~0x00000FFF; // assign pins to SSI
+        GPIO_PORTF_PCTL_R |= 0x00000222; // assign pins to SSI
 
         SSI1_CR1_R |= pSPIConfig->SPI_device_mode << 2; // disable SSI and set the SPI mode
         SSI1_CC_R = 0; // use the system clock
@@ -96,12 +96,12 @@ void SPI_init(SPI_config_t *pSPIConfig) {
     else if (pSPIConfig->SPIx == SPI2) {
         SPI_pclk_control(pSPIConfig->SPIx, SPI_PCLK_ENABLE);
 
-        // configure PORTB4 and PORTB7 for SSI2 clock and Tx, respectively
-        GPIO_PORTB_AMSEL_R &= ~0x90; // disable analog for these pins
-        GPIO_PORTB_DEN_R |= 0x90; // make the pins digital
-        GPIO_PORTB_AFSEL_R |= 0x90; // enable alternate function
-        GPIO_PORTB_PCTL_R &= ~0xF00F0000; // assign pins to SSI
-        GPIO_PORTB_PCTL_R |= 0x20020000; // assign pins to SSI
+        // configure PORTB4, PORTB7, and PORTB6 for SSI2 clock, Tx, and Rx, respectively
+        GPIO_PORTB_AMSEL_R &= ~0xD0; // disable analog for these pins
+        GPIO_PORTB_DEN_R |= 0xD0; // make the pins digital
+        GPIO_PORTB_AFSEL_R |= 0xD0; // enable alternate function
+        GPIO_PORTB_PCTL_R &= ~0xFF0F0000; // assign pins to SSI
+        GPIO_PORTB_PCTL_R |= 0x22020000; // assign pins to SSI
 
         SSI2_CR1_R |= pSPIConfig->SPI_device_mode << 2; // disable SSI and set the SPI mode
         SSI2_CC_R = 0; // use the system clock
@@ -118,12 +118,12 @@ void SPI_init(SPI_config_t *pSPIConfig) {
     else if (pSPIConfig->SPIx == SPI3) {
         SPI_pclk_control(pSPIConfig->SPIx, SPI_PCLK_ENABLE);
 
-        // configure PORTD0 and PORTD3 for SSI3 clock and Tx, respectively
-        GPIO_PORTD_AMSEL_R &= ~0x09; // disable analog for these pins
-        GPIO_PORTD_DEN_R |= 0x09; // make the pins digital
-        GPIO_PORTD_AFSEL_R |= 0x09; // enable alternate function
-        GPIO_PORTD_PCTL_R &= ~0x0000F00F; // assign pins to SSI
-        GPIO_PORTD_PCTL_R |= 0x00001001; // assign pins to SSI
+        // configure PORTD0, PORTD3, and PORTD2 for SSI3 clock, Tx, and Rx, respectively
+        GPIO_PORTD_AMSEL_R &= ~0x0D; // disable analog for these pins
+        GPIO_PORTD_DEN_R |= 0x0D; // make the pins digital
+        GPIO_PORTD_AFSEL_R |= 0x0D; // enable alternate function
+        GPIO_PORTD_PCTL_R &= ~0x0000FF0F; // assign pins to SSI
+        GPIO_PORTD_PCTL_R |= 0x00001101; // assign pins to SSI
 
         SSI3_CR1_R |= pSPIConfig->SPI_device_mode << 2; // disable SSI and set the SPI mode
         SSI3_CC_R = 0; // use the system clock
@@ -286,6 +286,21 @@ void SPI_read_byte(SPI_config_t *pSPIConfig, uint8_t* read_buffer, uint8_t ss_po
         while(SSI0_SR_R & 3 == 0); // wait until FIFO is not empty
         *read_buffer = SSI0_DR_R;
         while(SSI0_SR_R & 0x10); // wait until receive is complete
+    }
+    else if (pSPIConfig->SPIx == SPI1) {
+        while(SSI1_SR_R & 3 == 0); // wait until FIFO is not empty
+        *read_buffer = SSI1_DR_R;
+        while(SSI1_SR_R & 0x10); // wait until receive is complete
+    }
+    else if (pSPIConfig->SPIx == SPI2) {
+        while(SSI2_SR_R & 3 == 0); // wait until FIFO is not empty
+        *read_buffer = SSI2_DR_R;
+        while(SSI2_SR_R & 0x10); // wait until receive is complete
+    }
+    else if (pSPIConfig->SPIx == SPI3) {
+        while(SSI3_SR_R & 3 == 0); // wait until FIFO is not empty
+        *read_buffer = SSI3_DR_R;
+        while(SSI3_SR_R & 0x10); // wait until receive is complete
     }
 
 
