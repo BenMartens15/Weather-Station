@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include "repo/lib/drivers/gpio_driver.h"
 
+uint8_t get_keypad_key_pressed();
 void keypad_init(uint8_t column_port, uint8_t row_port, uint8_t* column_pins, uint8_t* row_pins);
 uint8_t keypad_check_key();
 

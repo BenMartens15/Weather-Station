@@ -11,7 +11,7 @@
 
 static I2C_config_t temp_sensor;
 
-void delay_ms(int time_ms) {
+void temp_sensor_delay(int time_ms) {
     int i, j;
     for(i = 0 ; i < time_ms; i++)
         for(j = 0; j < 3180; j++)
@@ -37,9 +37,9 @@ void temp_sensor_init(uint8_t I2Cx) {
     if (sensor_status & 0x18 != 0x18) {
         // initializing register 0x1B
         I2C_master_send_data(I2Cx, SLAVE_ADDRESS, register_clear, 3);
-        delay_ms(5);
+        temp_sensor_delay(5);
         I2C_master_receive_data(I2Cx, SLAVE_ADDRESS, received_bytes, 3);
-        delay_ms(10);
+        temp_sensor_delay(10);
         register_init[0] = 0xB0 | 0x1B; // register command
         register_init[1] = received_bytes[1];
         register_init[2] = received_bytes[2];
@@ -48,9 +48,9 @@ void temp_sensor_init(uint8_t I2Cx) {
         // initializing register 0x1C
         register_clear[0] = 0x1C;
         I2C_master_send_data(I2Cx, SLAVE_ADDRESS, register_clear, 3);
-        delay_ms(5);
+        temp_sensor_delay(5);
         I2C_master_receive_data(I2Cx, SLAVE_ADDRESS, received_bytes, 3);
-        delay_ms(10);
+        temp_sensor_delay(10);
         register_init[0] = 0xB0 | 0x1C; // register command
         register_init[1] = received_bytes[1];
         register_init[2] = received_bytes[2];
@@ -59,9 +59,9 @@ void temp_sensor_init(uint8_t I2Cx) {
         // initializing register 0x1E
         register_clear[0] = 0x1E;
         I2C_master_send_data(I2Cx, SLAVE_ADDRESS, register_clear, 3);
-        delay_ms(5);
+        temp_sensor_delay(5);
         I2C_master_receive_data(I2Cx, SLAVE_ADDRESS, received_bytes, 3);
-        delay_ms(10);
+        temp_sensor_delay(10);
         register_init[0] = 0xB0 | 0x1E; // register command
         register_init[1] = received_bytes[1];
         register_init[2] = received_bytes[2];
@@ -78,10 +78,10 @@ void temp_sensor_measure(uint32_t* measurements) {
     uint32_t temperature = 0;
 
     I2C_master_send_data(temp_sensor.I2Cx, SLAVE_ADDRESS, trigger_measurement, 3); // trigger a measurement
-    delay_ms(80);
+    temp_sensor_delay(80);
     while(status_word & 0x80 == 0x80) { // wait until the sensor is not busy
         I2C_master_receive_byte(temp_sensor.I2Cx, SLAVE_ADDRESS, &status_word);
-        delay_ms(2);
+        temp_sensor_delay(2);
     }
     I2C_master_receive_data(temp_sensor.I2Cx, SLAVE_ADDRESS, read_values, 6);
 

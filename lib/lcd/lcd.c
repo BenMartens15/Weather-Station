@@ -16,7 +16,7 @@ void LCD_init(uint8_t SPIx, uint8_t ss_port, uint8_t ss_pin) {
     lcd.SPI_device_mode = SPI_DEVICE_MODE_MASTER;
     lcd.SPI_cpol = SPI_CPOL_LOW;
     lcd.SPI_cpha = SPI_CPHA_LOW;
-    lcd.SPI_speed = SPI_SCLK_SPEED_DIV64;
+    lcd.SPI_speed = SPI_SCLK_SPEED_DIV128;
     lcd.SPI_dss = SPI_DSS_8BITS;
 
     SPI_init(&lcd);

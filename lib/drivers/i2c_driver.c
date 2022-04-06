@@ -114,7 +114,7 @@ uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
     if (I2Cx == I2C0) {
         I2C0_MSA_R = slave_addr << 1;
         I2C0_MDR_R = data;
-        while(I2C0_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C0_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C0_MCS_R = 0x07; // initiate a single byte transmit of data
         error = I2C_wait_busy(I2Cx);
         if(error) {
@@ -122,11 +122,11 @@ uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
         }
         return 0;
     }
-    else if (I2Cx == I2C3) {
-        I2C3_MSA_R = slave_addr << 1;
-        I2C3_MDR_R = data;
-        while(I2C3_MCS_R & 7); // wait until the I2C bus is not busy
-        I2C3_MCS_R = 0x07; // initiate a single byte transmit of data
+    else if (I2Cx == I2C1) {
+        I2C1_MSA_R = slave_addr << 1;
+        I2C1_MDR_R = data;
+        while(I2C1_MCS_R & 0x80); // wait until the I2C bus is not busy
+        I2C1_MCS_R = 0x07; // initiate a single byte transmit of data
         error = I2C_wait_busy(I2Cx);
         if(error) {
             return error;
@@ -136,7 +136,7 @@ uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
     else if (I2Cx == I2C2) {
         I2C2_MSA_R = slave_addr << 1;
         I2C2_MDR_R = data;
-        while(I2C2_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C2_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C2_MCS_R = 0x07; // initiate a single byte transmit of data
         error = I2C_wait_busy(I2Cx);
         if(error) {
@@ -147,7 +147,7 @@ uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
     else if (I2Cx == I2C3) {
         I2C3_MSA_R = slave_addr << 1;
         I2C3_MDR_R = data;
-        while(I2C3_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C3_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C3_MCS_R = 0x07; // initiate a single byte transmit of data
         error = I2C_wait_busy(I2Cx);
         if(error) {
@@ -164,7 +164,7 @@ uint8_t I2C_master_receive_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
         I2C0_MSA_R = 0; // resetting the address register
         I2C0_MSA_R |= (1 << 0); // set the R/S bit to 1 (receive)
         I2C0_MSA_R |= slave_addr << 1;
-        while(I2C0_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C0_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C0_MCS_R = 0x07; // initiate a single byte transmit of data
         error = I2C_wait_busy(I2Cx);
         if (error) {
@@ -177,7 +177,7 @@ uint8_t I2C_master_receive_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
         I2C1_MSA_R = 0; // resetting the address register
         I2C1_MSA_R |= (1 << 0); // set the R/S bit to 1 (receive)
         I2C1_MSA_R |= slave_addr << 1;
-        while(I2C1_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C1_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C1_MCS_R = 0x07; // initiate a single byte transmit of data
         error = I2C_wait_busy(I2Cx);
         if (error) {
@@ -190,7 +190,7 @@ uint8_t I2C_master_receive_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
         I2C2_MSA_R = 0; // resetting the address register
         I2C2_MSA_R |= (1 << 0); // set the R/S bit to 1 (receive)
         I2C2_MSA_R |= slave_addr << 1;
-        while(I2C2_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C2_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C2_MCS_R = 0x07; // initiate a single byte transmit of data
         error = I2C_wait_busy(I2Cx);
         if (error) {
@@ -203,7 +203,7 @@ uint8_t I2C_master_receive_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
         I2C3_MSA_R = 0; // resetting the address register
         I2C3_MSA_R |= (1 << 0); // set the R/S bit to 1 (receive)
         I2C3_MSA_R |= slave_addr << 1;
-        while(I2C3_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C3_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C3_MCS_R = 0x07; // initiate a single byte transmit of data
         error = I2C_wait_busy(I2Cx);
         if (error) {
@@ -329,7 +329,7 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
     if (I2Cx == I2C0) {
         I2C0_MSA_R |= (1 << 0); // setting R/S bit to 1 for reading
         I2C0_MSA_R |= slave_addr << 1;
-        while(I2C0_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C0_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C0_MCS_R = 0x0B; // generate start condition and enable automatic ACKing
         uint8_t index;
         for (index = 0; index < num_bytes - 1; index++) {
@@ -353,7 +353,7 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
     else if (I2Cx == I2C1) {
         I2C1_MSA_R |= (1 << 0); // setting R/S bit to 1 for reading
         I2C1_MSA_R |= slave_addr << 1;
-        while(I2C1_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C1_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C1_MCS_R = 0x0B; // generate start condition and enable automatic ACKing
         uint8_t index;
         for (index = 0; index < num_bytes - 1; index++) {
@@ -377,7 +377,7 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
     else if (I2Cx == I2C2) {
         I2C2_MSA_R |= (1 << 0); // setting R/S bit to 1 for reading
         I2C2_MSA_R |= slave_addr << 1;
-        while(I2C2_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C2_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C2_MCS_R = 0x0B; // generate start condition and enable automatic ACKing
         uint8_t index;
         for (index = 0; index < num_bytes - 1; index++) {
@@ -401,7 +401,7 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
     else if (I2Cx == I2C3) {
         I2C3_MSA_R |= (1 << 0); // setting R/S bit to 1 for reading
         I2C3_MSA_R |= slave_addr << 1;
-        while(I2C3_MCS_R & 7); // wait until the I2C bus is not busy
+        while(I2C3_MCS_R & 0x80); // wait until the I2C bus is not busy
         I2C3_MCS_R = 0x0B; // generate start condition and enable automatic ACKing
         uint8_t index;
         for (index = 0; index < num_bytes - 1; index++) {
@@ -424,4 +424,3 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
     }
     return 0;
 }
-
