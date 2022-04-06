@@ -28,6 +28,8 @@ void SPI_ss_control(uint8_t port, uint8_t pin, uint8_t high_low);
 void SPI_write_byte(SPI_config_t *pSPIConfig, uint8_t data, uint8_t ss_port, uint8_t ss_pin, uint8_t release);
 void SPI_write_string(SPI_config_t *pSPIConfig, char* data, uint8_t ss_port, uint8_t ss_pin);
 
+void SPI_read_byte(SPI_config_t *pSPIConfig, uint8_t* read_buffer, uint8_t ss_port, uint8_t ss_pin, uint8_t release);
+
 void SPI_delay(uint16_t time_ms);
 
 #define SPI_PCLK_ENABLE     1
