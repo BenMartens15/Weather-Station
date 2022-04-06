@@ -10,9 +10,13 @@
 void delay_ms(int time_ms);
 
 int main() {
+    float pressure;
     delay_ms(1000);
 
     baro_sensor_init(SPI2, SPI_SS_PORT_E, SPI_SS_PIN_0);
+    delay_ms(10);
+    pressure = baro_measure_pressure();
+    delay_ms(500);
 }
 
 void delay_ms(int time_ms) {
