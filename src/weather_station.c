@@ -80,8 +80,8 @@ int main() {
             LCD_display_string(display_output);
         }
         else if(get_keypad_key_pressed() == 5) {
-            uint16_t lux = lux_sensor_read_lux();
-            snprintf(display_output, 16, "LUM: %dklux", lux);
+            float lux = lux_sensor_read_lux();
+            snprintf(display_output, 16, "LUM: %0.1f lux", lux);
             LCD_move_cursor(0, 0);
             LCD_clear();
             LCD_display_string(display_output);
