@@ -12,6 +12,9 @@
 #include "repo/lib/barometric_pressure_sensor/barometric_pressure_sensor.h"
 #include "repo/lib/lux_sensor/lux_sensor.h"
 #include "repo/lib/keypad/keypad.h"
+#include "repo/lib/drivers/gpio_driver.h"
+
+#define STEPS_PER_REV   200
 
 void delay_ms(uint16_t time_ms) {
     uint16_t i, j;
@@ -24,12 +27,42 @@ int main() {
     uint8_t keypad_column_pins[] = {GPIO_PIN_NUM_3, GPIO_PIN_NUM_2, GPIO_PIN_NUM_4};
     uint8_t keypad_row_pins[] = {GPIO_PIN_NUM_7, GPIO_PIN_NUM_4, GPIO_PIN_NUM_5, GPIO_PIN_NUM_6};
 
+    GPIO_config_t stepper_in1;
+    GPIO_config_t stepper_in2;
+    GPIO_config_t stepper_in3;
+    GPIO_config_t stepper_in4;
+
+    stepper_in1.GPIOx = GPIOE;
+    stepper_in1.GPIO_pin_dir = GPIO_OUT;
+    stepper_in1.GPIO_pu_pd = GPIO_PIN_NO_PUPD;
+    stepper_in1.GPIO_pin_num = GPIO_PIN_NUM_3;
+    GPIO_init(&stepper_in1);
+
+    stepper_in2.GPIOx = GPIOF;
+    stepper_in2.GPIO_pin_dir = GPIO_OUT;
+    stepper_in2.GPIO_pu_pd = GPIO_PIN_NO_PUPD;
+    stepper_in2.GPIO_pin_num = GPIO_PIN_NUM_1;
+    GPIO_init(&stepper_in2);
+
+    stepper_in3.GPIOx = GPIOF;
+    stepper_in3.GPIO_pin_dir = GPIO_OUT;
+    stepper_in3.GPIO_pu_pd = GPIO_PIN_NO_PUPD;
+    stepper_in3.GPIO_pin_num = GPIO_PIN_NUM_2;
+    GPIO_init(&stepper_in3);
+
+    stepper_in4.GPIOx = GPIOF;
+    stepper_in4.GPIO_pin_dir = GPIO_OUT;
+    stepper_in4.GPIO_pu_pd = GPIO_PIN_NO_PUPD;
+    stepper_in4.GPIO_pin_num = GPIO_PIN_NUM_3;
+    GPIO_init(&stepper_in4);
+
     delay_ms(500);
     LCD_init(SPI3, SPI_SS_PORT_E, SPI_SS_PIN_1);
     temp_sensor_init(I2C1);
     baro_sensor_init(SPI2, SPI_SS_PORT_E, SPI_SS_PIN_0);
     lux_sensor_init(I2C1);
     keypad_init(GPIOA, GPIOC, keypad_column_pins, keypad_row_pins);
+
     delay_ms(1000);
 
     LCD_clear();
@@ -85,6 +118,24 @@ int main() {
             LCD_move_cursor(0, 0);
             LCD_clear();
             LCD_display_string(display_output);
+        }
+        else if(get_keypad_key_pressed() == 6) {
+            uint8_t steps;
+            for(steps = 0; steps < STEPS_PER_REV / 4; steps++) {
+                GPIO_write_pin(&stepper_in1, GPIO_PIN_HIGH);
+                GPIO_write_pin(&stepper_in2, GPIO_PIN_HIGH);
+                delay_ms(1);
+                GPIO_write_pin(&stepper_in1, GPIO_PIN_LOW);
+                GPIO_write_pin(&stepper_in3, GPIO_PIN_HIGH);
+                delay_ms(1);
+                GPIO_write_pin(&stepper_in2, GPIO_PIN_LOW);
+                GPIO_write_pin(&stepper_in4, GPIO_PIN_HIGH);
+                delay_ms(1);
+                GPIO_write_pin(&stepper_in3, GPIO_PIN_LOW);
+                GPIO_write_pin(&stepper_in1, GPIO_PIN_HIGH);
+                delay_ms(1);
+                GPIO_write_pin(&stepper_in4, GPIO_PIN_LOW);
+            }
         }
         delay_ms(250);
     }
