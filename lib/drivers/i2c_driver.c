@@ -109,13 +109,18 @@ void I2C_init(I2C_config_t *pI2CConfig) {
     }
 }
 
-uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
+uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data, uint8_t generate_stop) {
     uint8_t error;
     if (I2Cx == I2C0) {
         I2C0_MSA_R = slave_addr << 1;
         I2C0_MDR_R = data;
         while(I2C0_MCS_R & 0x80); // wait until the I2C bus is not busy
-        I2C0_MCS_R = 0x07; // initiate a single byte transmit of data
+        if (generate_stop) {
+            I2C0_MCS_R = 0x07; // initiate a single byte transmit of data followed by a stop condition
+        }
+        else {
+            I2C0_MCS_R = 0x03; // initiate a single byte transmit of data with no stop condition
+        }
         error = I2C_wait_busy(I2Cx);
         if(error) {
             return error;
@@ -126,7 +131,12 @@ uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
         I2C1_MSA_R = slave_addr << 1;
         I2C1_MDR_R = data;
         while(I2C1_MCS_R & 0x80); // wait until the I2C bus is not busy
-        I2C1_MCS_R = 0x07; // initiate a single byte transmit of data
+        if (generate_stop) {
+            I2C1_MCS_R = 0x07; // initiate a single byte transmit of data followed by a stop condition
+        }
+        else {
+            I2C1_MCS_R = 0x03; // initiate a single byte transmit of data with no stop condition
+        }
         error = I2C_wait_busy(I2Cx);
         if(error) {
             return error;
@@ -137,7 +147,12 @@ uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
         I2C2_MSA_R = slave_addr << 1;
         I2C2_MDR_R = data;
         while(I2C2_MCS_R & 0x80); // wait until the I2C bus is not busy
-        I2C2_MCS_R = 0x07; // initiate a single byte transmit of data
+        if (generate_stop) {
+            I2C2_MCS_R = 0x07; // initiate a single byte transmit of data followed by a stop condition
+        }
+        else {
+            I2C2_MCS_R = 0x03; // initiate a single byte transmit of data with no stop condition
+        }
         error = I2C_wait_busy(I2Cx);
         if(error) {
             return error;
@@ -148,7 +163,12 @@ uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data) {
         I2C3_MSA_R = slave_addr << 1;
         I2C3_MDR_R = data;
         while(I2C3_MCS_R & 0x80); // wait until the I2C bus is not busy
-        I2C3_MCS_R = 0x07; // initiate a single byte transmit of data
+        if (generate_stop) {
+            I2C3_MCS_R = 0x07; // initiate a single byte transmit of data followed by a stop condition
+        }
+        else {
+            I2C3_MCS_R = 0x03; // initiate a single byte transmit of data with no stop condition
+        }
         error = I2C_wait_busy(I2Cx);
         if(error) {
             return error;
@@ -348,7 +368,7 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
         if (error) {
             return error;
         }
-        receive_buffer[num_bytes] = I2C0_MDR_R;
+        receive_buffer[num_bytes - 1] = I2C0_MDR_R;
     }
     else if (I2Cx == I2C1) {
         I2C1_MSA_R |= (1 << 0); // setting R/S bit to 1 for reading
@@ -372,7 +392,7 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
         if (error) {
             return error;
         }
-        receive_buffer[num_bytes] = I2C1_MDR_R;
+        receive_buffer[num_bytes - 1] = I2C1_MDR_R;
     }
     else if (I2Cx == I2C2) {
         I2C2_MSA_R |= (1 << 0); // setting R/S bit to 1 for reading
@@ -396,7 +416,7 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
         if (error) {
             return error;
         }
-        receive_buffer[num_bytes] = I2C2_MDR_R;
+        receive_buffer[num_bytes - 1] = I2C2_MDR_R;
     }
     else if (I2Cx == I2C3) {
         I2C3_MSA_R |= (1 << 0); // setting R/S bit to 1 for reading
@@ -420,7 +440,7 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
         if (error) {
             return error;
         }
-        receive_buffer[num_bytes] = I2C3_MDR_R;
+        receive_buffer[num_bytes - 1] = I2C3_MDR_R;
     }
     return 0;
 }
