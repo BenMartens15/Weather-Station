@@ -29,7 +29,7 @@ int main() {
     baro_sensor_init(SPI2, SPI_SS_PORT_E, SPI_SS_PIN_0);
     lux_sensor_init(I2C1);
     keypad_init(GPIOA, GPIOC, keypad_column_pins, keypad_row_pins);
-    stepper_init(200, GPIOE, GPIO_PIN_NUM_3, GPIOF, GPIO_PIN_NUM_1, GPIOF, GPIO_PIN_NUM_2, GPIOF, GPIO_PIN_NUM_3);
+    stepper_init(200, GPIOE, GPIO_PIN_NUM_3, GPIOE, GPIO_PIN_NUM_2, GPIOE, GPIO_PIN_NUM_4, GPIOE, GPIO_PIN_NUM_5);
     delay_ms(500);
 
     while(1) {
