@@ -28,12 +28,6 @@ int main() {
     keypad_init(GPIOA, GPIOC, keypad_column_pins, keypad_row_pins);
     delay_ms(500);
 
-    // display the menu until a key is pressed
-    while(get_first_key_pressed() == 0) {
-        display_menu();
-    }
-
-
     while(1) {
         uint32_t humidity_temp[2]; // stores the humidity and temp values (multiplied by 10) read from the DHT20
         uint32_t ht_readings_integer[2]; // the integer portion of the humidity and temperature readings
@@ -71,15 +65,8 @@ int main() {
             LCD_clear();
             LCD_display_string(display_output);
         }
-        else if(get_keypad_key_pressed() > 4) {
-            while(1) {
-                if(get_first_key_pressed() == 0) {
-                    display_menu();
-                }
-                else {
-                    break;
-                }
-            }
+        else if(get_keypad_key_pressed() > 4 || get_keypad_key_pressed() == 0) {
+            display_menu();
         }
         delay_ms(250);
     }
@@ -91,7 +78,7 @@ void display_menu() {
     LCD_move_cursor(1, 0);
     LCD_display_string("2: Humidity");
     delay_ms(750);
-    if (get_first_key_pressed()) {
+    if (get_keypad_key_pressed() < 5 && get_keypad_key_pressed() != 0) {
         return;
     }
     LCD_clear();
@@ -99,13 +86,13 @@ void display_menu() {
     LCD_move_cursor(1, 0);
     LCD_display_string("4: Luminance");
     delay_ms(750);
-    if (get_first_key_pressed()) {
+    if (get_keypad_key_pressed() < 5 && get_keypad_key_pressed() != 0) {
         return;
     }
     LCD_clear();
     LCD_display_string("5: Back to Menu");
-    delay_ms(750);
-    if (get_first_key_pressed()) {
+    delay_ms(500);
+    if (get_keypad_key_pressed() < 5 && get_keypad_key_pressed() != 0) {
         return;
     }
 }
