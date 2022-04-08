@@ -32,12 +32,6 @@ int main() {
     stepper_init(200, GPIOE, GPIO_PIN_NUM_3, GPIOF, GPIO_PIN_NUM_1, GPIOF, GPIO_PIN_NUM_2, GPIOF, GPIO_PIN_NUM_3);
     delay_ms(500);
 
-    // display the menu until a key is pressed
-    while(get_first_key_pressed() == 0) {
-        display_menu();
-    }
-
-
     while(1) {
         uint32_t humidity_temp[2]; // stores the humidity and temp values (multiplied by 10) read from the DHT20
         uint32_t ht_readings_integer[2]; // the integer portion of the humidity and temperature readings
@@ -76,28 +70,21 @@ int main() {
             LCD_display_string(display_output);
         }
         else if(get_keypad_key_pressed() == 5) {
-            while(1) {
-                if(get_first_key_pressed() == 0) {
-                    display_menu();
-                }
-                else {
-                    break;
-                }
-            }
-        }
-        else if(get_keypad_key_pressed() == 6) {
             LCD_clear();
             LCD_display_string("Motor rotating");
             LCD_move_cursor(1, 0);
             LCD_display_string("clockwise");
             stepper_rotate(DIRECTION_CLOCKWISE, 5, 100);
         }
-        else if(get_keypad_key_pressed() == 7) {
+        else if(get_keypad_key_pressed() == 6) {
             LCD_clear();
             LCD_display_string("Motor rotating");
             LCD_move_cursor(1, 0);
             LCD_display_string("counterclockwise");
             stepper_rotate(DIRECTION_COUNTER_CLOCKWISE, 5, 100);
+        }
+        else if(get_keypad_key_pressed() > 6 || get_keypad_key_pressed() == 0) {
+            display_menu();
         }
         delay_ms(250);
     }
@@ -109,7 +96,7 @@ void display_menu() {
     LCD_move_cursor(1, 0);
     LCD_display_string("2: Humidity");
     delay_ms(750);
-    if (get_first_key_pressed()) {
+    if (get_keypad_key_pressed() < 7 && get_keypad_key_pressed() != 0) {
         return;
     }
     LCD_clear();
@@ -117,21 +104,21 @@ void display_menu() {
     LCD_move_cursor(1, 0);
     LCD_display_string("4: Luminance");
     delay_ms(750);
-    if (get_first_key_pressed()) {
+    if (get_keypad_key_pressed() < 7 && get_keypad_key_pressed() != 0) {
         return;
     }
     LCD_clear();
-    LCD_display_string("5: Back to Menu");
-    delay_ms(750);
-    if (get_first_key_pressed()) {
-        return;
-    }
-    LCD_clear();
-    LCD_display_string("6: Rotate CW");
+    LCD_display_string("5: Rotate CW");
     LCD_move_cursor(1, 0);
-    LCD_display_string("7: Rotate CCW");
+    LCD_display_string("6: Rotate CCW");
     delay_ms(750);
-    if (get_first_key_pressed()) {
+    if (get_keypad_key_pressed() < 7 && get_keypad_key_pressed() != 0) {
+        return;
+    }
+    LCD_clear();
+    LCD_display_string("7: Back to Menu");
+    delay_ms(500);
+    if (get_keypad_key_pressed() < 7 && get_keypad_key_pressed() != 0) {
         return;
     }
 }
