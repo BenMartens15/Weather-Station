@@ -30,13 +30,34 @@ int main() {
     baro_sensor_init(SPI2, SPI_SS_PORT_E, SPI_SS_PIN_0);
     lux_sensor_init(I2C1);
     keypad_init(GPIOA, GPIOC, keypad_column_pins, keypad_row_pins);
-    delay_ms(1000);
+    delay_ms(500);
 
-    LCD_clear();
+    // display the menu until a key is pressed
+    while(get_first_key_pressed() == 0) {
+        LCD_clear();
+        LCD_display_string("1: Temperature");
+        LCD_move_cursor(1, 0);
+        LCD_display_string("2: Humidity");
+        delay_ms(750);
+        if (get_first_key_pressed()) {
+            break;
+        }
+        LCD_clear();
+        LCD_display_string("3: Baro Pressure");
+        LCD_move_cursor(1, 0);
+        LCD_display_string("4: Luminance");
+        delay_ms(750);
+        if (get_first_key_pressed()) {
+            break;
+        }
+        LCD_clear();
+        LCD_display_string("5: Back to Menu");
+        delay_ms(750);
+        if (get_first_key_pressed()) {
+            break;
+        }
+    }
 
-    LCD_display_string("Press 1, 2, 3,");
-    LCD_move_cursor(1, 0);
-    LCD_display_string("4, or 5.");
 
     while(1) {
         uint32_t humidity_temp[2]; // stores the humidity and temp values (multiplied by 10) read from the DHT20
@@ -52,39 +73,54 @@ int main() {
             LCD_move_cursor(0, 0);
             LCD_clear();
             LCD_display_string(display_output);
-            snprintf(display_output, 16, "RH: %d.%d%%", ht_readings_integer[0], ht_readings_decimal[0]);
-            LCD_move_cursor(1, 0);
-            LCD_display_string(display_output);
         }
-        else if (get_keypad_key_pressed() == 2) {
+        else if(get_keypad_key_pressed() == 2) {
             temp_sensor_measure(humidity_temp);
             temp_sensor_to_decimal(humidity_temp, ht_readings_integer, ht_readings_decimal);
-            snprintf(display_output, 16, "Temp: %d.%d C", ht_readings_integer[1], ht_readings_decimal[1]);
+            snprintf(display_output, 16, "RH: %d.%d%%", ht_readings_integer[0], ht_readings_decimal[0]);
             LCD_move_cursor(0, 0);
             LCD_clear();
             LCD_display_string(display_output);
         }
         else if(get_keypad_key_pressed() == 3) {
-            temp_sensor_measure(humidity_temp);
-            temp_sensor_to_decimal(humidity_temp, ht_readings_integer, ht_readings_decimal);
-            snprintf(display_output, 16, "RH: %d.%d%%", ht_readings_integer[0], ht_readings_decimal[0]);
-            LCD_move_cursor(0, 0);
-            LCD_clear();
-            LCD_display_string(display_output);
-        }
-        else if(get_keypad_key_pressed() == 4) {
             float barometric_pressure = baro_measure_pressure();
             snprintf(display_output, 16, "BP: %0.1fkPa", barometric_pressure);
             LCD_move_cursor(0, 0);
             LCD_clear();
             LCD_display_string(display_output);
         }
-        else if(get_keypad_key_pressed() == 5) {
+        else if(get_keypad_key_pressed() == 4) {
             float lux = lux_sensor_read_lux();
             snprintf(display_output, 16, "LUM: %0.1f lux", lux);
             LCD_move_cursor(0, 0);
             LCD_clear();
             LCD_display_string(display_output);
+        }
+        else if(get_keypad_key_pressed() == 5) {
+            while(1) {
+                LCD_clear();
+                LCD_display_string("1: Temperature");
+                LCD_move_cursor(1, 0);
+                LCD_display_string("2: Humidity");
+                delay_ms(750);
+                if (get_first_key_pressed()) {
+                    break;
+                }
+                LCD_clear();
+                LCD_display_string("3: Baro Pressure");
+                LCD_move_cursor(1, 0);
+                LCD_display_string("4: Luminance");
+                delay_ms(750);
+                if (get_first_key_pressed()) {
+                    break;
+                }
+                LCD_clear();
+                LCD_display_string("5: Back to Menu");
+                delay_ms(750);
+                if (get_first_key_pressed()) {
+                    break;
+                }
+            }
         }
         delay_ms(250);
     }
