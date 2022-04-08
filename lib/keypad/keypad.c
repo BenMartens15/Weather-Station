@@ -136,28 +136,35 @@ uint8_t keypad_check_key() {
             return 5;
         }
         else if (column_pressed == 2) {
+            first_key_pressed = 0;
             return 6;
         }
     }
     else if (row_pressed == 2) {
         if (column_pressed == 0) {
+            first_key_pressed = 0;
             return 7;
         }
         else if (column_pressed == 1) {
+            first_key_pressed = 0;
             return 8;
         }
         else if (column_pressed == 2) {
+            first_key_pressed = 0;
             return 9;
         }
     }
     else if (row_pressed == 3) {
         if (column_pressed == 0) {
+            first_key_pressed = 0;
             return 10;
         }
         else if (column_pressed == 1) {
+            first_key_pressed = 0;
             return 11;
         }
         else if (column_pressed == 2) {
+            first_key_pressed = 0;
             return 12;
         }
     }
