@@ -15,7 +15,6 @@ static uint8_t column_pins[3];
 static uint8_t row_port;
 static uint8_t row_pins[4];
 static uint8_t keypad_key_pressed;
-static uint8_t first_key_pressed = 0; // keeps track of if any key has been pressed since the program initially began
 
 static void debounce() { // delay to debounce the keypad buttons
     int i, j;
@@ -33,10 +32,6 @@ static void delay_ms(uint16_t time_ms) {
 
 uint8_t get_keypad_key_pressed() {
     return keypad_key_pressed;
-}
-
-uint8_t get_first_key_pressed() {
-    return first_key_pressed;
 }
 
 void keypad_init(uint8_t c_port, uint8_t r_port, uint8_t* c_pins, uint8_t* r_pins) {
@@ -89,8 +84,6 @@ uint8_t keypad_check_key() {
     uint8_t column_pressed = 5;
     uint8_t test_row;
 
-    first_key_pressed = 1;
-
     debounce();
     for (test_row = 0; test_row < 4; test_row++) { // make each row high
         keypad_rows.GPIO_pin_num = row_pins[test_row];
@@ -132,7 +125,6 @@ uint8_t keypad_check_key() {
             return 4;
         }
         else if (column_pressed == 1) {
-            first_key_pressed = 0;
             return 5;
         }
         else if (column_pressed == 2) {
