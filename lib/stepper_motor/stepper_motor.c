@@ -32,16 +32,17 @@ void stepper_init(uint8_t steps_per_revolution, uint8_t in1_port, uint8_t in1_pi
     stepper_in2.GPIO_pin_num = in2_pin;
     GPIO_init(&stepper_in2);
 
-    stepper_in3.GPIOx = in3_port;
+    // I swapped the ports and pins of stepper_in3 and stepper_in4 cause I accidently mixed them when I soldered the motor driver board
+    stepper_in3.GPIOx = in4_port;
     stepper_in3.GPIO_pin_dir = GPIO_OUT;
     stepper_in3.GPIO_pu_pd = GPIO_PIN_NO_PUPD;
-    stepper_in3.GPIO_pin_num = in3_pin;
+    stepper_in3.GPIO_pin_num = in4_pin;
     GPIO_init(&stepper_in3);
 
-    stepper_in4.GPIOx = in4_port;
+    stepper_in4.GPIOx = in3_port;
     stepper_in4.GPIO_pin_dir = GPIO_OUT;
     stepper_in4.GPIO_pu_pd = GPIO_PIN_NO_PUPD;
-    stepper_in4.GPIO_pin_num = in4_pin;
+    stepper_in4.GPIO_pin_num = in3_pin;
     GPIO_init(&stepper_in4);
 
 }
