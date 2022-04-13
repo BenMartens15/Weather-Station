@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include "repo/lib/drivers/tm4c123gh6pm.h"
 
+// GPIO pin configuration structure
 typedef struct {
     uint8_t GPIOx; // GPIO port
     uint8_t GPIO_pin_num;
@@ -18,12 +19,17 @@ typedef struct {
     uint8_t GPIO_pu_pd; // pull-up/pull-down resistor control
 }GPIO_config_t;
 
+// enables or disables the peripheral clock associated with different GPIO ports
 void GPIO_pclk_control(uint8_t GPIOx, uint8_t enable_disable);
+
+// initializes a GPIO pin based on the GPIO configuration structure passed
 void GPIO_init(GPIO_config_t *pGPIOConfig);
 
+// GPIO pin read and write functions
 uint8_t GPIO_read_pin(GPIO_config_t *pGPIOConfig);
 void GPIO_write_pin(GPIO_config_t *pGPIOConfig, uint8_t high_low);
 
+// configures interrupts for GPIO pins
 void GPIO_interrupt_config(GPIO_config_t *pGPIConfig, uint8_t edge_level_sensitive, uint8_t edge_level_trigger);
 
 #define GPIO_PCLK_ENABLE    1
@@ -38,8 +44,10 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIConfig, uint8_t edge_level_sensiti
 #define GPIO_LOW_FALLING_TRIGGER    0
 #define GPIO_HIGH_RISING_TRIGGER    1
 
+/*************** Macros for elements of the GPIO configuration structure ***************/
 /*
  * @GPIOx
+ * GPIO port
  */
 #define GPIOA               0
 #define GPIOB               1
@@ -50,6 +58,7 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIConfig, uint8_t edge_level_sensiti
 
 /*
  * @GPIO_pin_num
+ * GPIO pin number
  */
 #define GPIO_PIN_NUM_0      0
 #define GPIO_PIN_NUM_1      1
@@ -62,6 +71,7 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIConfig, uint8_t edge_level_sensiti
 
 /*
  * @GPIO_pin_dir
+ * GPIO direction (input or output)
  */
 #define GPIO_IN             0
 #define GPIO_OUT            1
@@ -69,11 +79,13 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIConfig, uint8_t edge_level_sensiti
 
 /*
  * @GPIO_alt_function
+ * GPIO alternate function mode
  */
 
 
 /*
  * @GPIO_pu_pd
+ * GPIO pull-up or pull-down resistor selection
  */
 #define GPIO_PIN_PU         0 // pull-up resistor
 #define GPIO_PIN_PD         1 // pull-down resistor

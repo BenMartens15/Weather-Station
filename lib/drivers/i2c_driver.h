@@ -11,14 +11,19 @@
 #include "tm4c123gh6pm.h"
 #include <stdint.h>
 
+// I2C configuration structure
 typedef struct {
     uint8_t I2Cx;
     uint8_t I2C_speed;
 }I2C_config_t;
 
+// enables or disables the peripheral clock associated with different I2C modules
 void I2C_pclk_control(uint8_t I2Cx, uint8_t enable_disable);
+
+// initializes an I2C module based on the I2C configuration structure passed
 void I2C_init(I2C_config_t *pI2CConfig);
 
+// I2C master send and receive functions
 uint8_t I2C_master_send_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t data, uint8_t generate_stop);
 uint8_t I2C_master_receive_byte(uint8_t I2Cx, uint8_t slave_addr, uint8_t* receive_buffer);
 uint8_t I2C_master_send_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* data, uint8_t num_bytes); // sends multiple bytes of data
@@ -27,8 +32,10 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
 #define I2C_PCLK_ENABLE     1
 #define I2C_PCLK_DISABLE    0
 
+/*************** Macros for elements of the I2C configuration structure ***************/
 /*
  * @I2Cx
+ * I2C module
  */
 #define I2C0    0
 #define I2C1    1
@@ -37,6 +44,7 @@ uint8_t I2C_master_receive_data(uint8_t I2Cx, uint8_t slave_addr, uint8_t* recei
 
 /*
  * @I2C_speed
+ * I2C speeds
  */
 #define I2C_speed_standard  0x07 // 100Kbps @ 16MHz
 

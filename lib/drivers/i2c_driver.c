@@ -13,15 +13,15 @@ static int I2C_wait_busy(uint8_t I2Cx) {
         return I2C0_MCS_R & 0xE;
     }
     else if (I2Cx == I2C1) {
-        while(I2C1_MCS_R & 1);
+        while(I2C1_MCS_R & 1); // wait until master is not busy
         return I2C1_MCS_R & 0xE;
     }
     else if (I2Cx == I2C2) {
-        while(I2C2_MCS_R & 1);
+        while(I2C2_MCS_R & 1); // wait until master is not busy
         return I2C2_MCS_R & 0xE;
     }
     else {
-        while(I2C3_MCS_R & 1);
+        while(I2C3_MCS_R & 1); // wait until master is not busy
         return I2C3_MCS_R & 0xE;
     }
 }
@@ -50,7 +50,7 @@ void I2C_pclk_control(uint8_t I2Cx, uint8_t enable_disable) {
             SYSCTL_RCGCI2C_R &= ~(1 << 0); // enable the clock for I2C0
             SYSCTL_RCGCGPIO_R &= ~(1 << 1); // enable the clock for GPIOB for I2C0
         }
-        else if (I2Cx == I2C3) {
+        else if (I2Cx == I2C1) {
             SYSCTL_RCGCI2C_R &= ~(1 << 1); // enable the clock for I2C3
             SYSCTL_RCGCGPIO_R &= ~(1 << 0); // enable the clock for GPIOA for I2C3
         }

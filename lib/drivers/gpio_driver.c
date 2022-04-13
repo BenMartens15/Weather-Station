@@ -30,32 +30,32 @@ void GPIO_pclk_control(uint8_t GPIOx, uint8_t enable_disable) {
 
 void GPIO_init(GPIO_config_t *pGPIOConfig) {
     GPIO_pclk_control(pGPIOConfig->GPIOx, GPIO_PCLK_ENABLE);
-    if (pGPIOConfig->GPIOx == GPIOA) {
+    if (pGPIOConfig->GPIOx == GPIOA) { // initialize GPIO port A
         if (pGPIOConfig->GPIO_pin_dir == GPIO_OUT) {
-            GPIO_PORTA_DIR_R |= (1 << pGPIOConfig->GPIO_pin_num);
+            GPIO_PORTA_DIR_R |= (1 << pGPIOConfig->GPIO_pin_num); // pin is output
         }
         else {
-            GPIO_PORTA_DIR_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
+            GPIO_PORTA_DIR_R &= ~(1 << pGPIOConfig->GPIO_pin_num);  // pin is input
         }
 
         if (pGPIOConfig->GPIO_pu_pd == GPIO_PIN_PU) {
-            GPIO_PORTA_PUR_R |= (1 << pGPIOConfig->GPIO_pin_num);
+            GPIO_PORTA_PUR_R |= (1 << pGPIOConfig->GPIO_pin_num); // pull-up resistor
         }
         else if (pGPIOConfig->GPIO_pu_pd == GPIO_PIN_PD) {
-            GPIO_PORTA_PDR_R |= (1 << pGPIOConfig->GPIO_pin_num);
+            GPIO_PORTA_PDR_R |= (1 << pGPIOConfig->GPIO_pin_num); // pull-down resistor
         }
         else if (pGPIOConfig->GPIO_pu_pd == GPIO_PIN_OD) {
-            GPIO_PORTA_ODR_R |= (1 << pGPIOConfig->GPIO_pin_num);
+            GPIO_PORTA_ODR_R |= (1 << pGPIOConfig->GPIO_pin_num); // open drain configuration
         }
         else {
-            GPIO_PORTA_PUR_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
+            GPIO_PORTA_PUR_R &= ~(1 << pGPIOConfig->GPIO_pin_num); // no pull-up or pull-down resistor
             GPIO_PORTA_PDR_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
             GPIO_PORTA_ODR_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
 
-        GPIO_PORTA_DEN_R |= (1 << pGPIOConfig->GPIO_pin_num);
+        GPIO_PORTA_DEN_R |= (1 << pGPIOConfig->GPIO_pin_num); // make the pin digital
     }
-    else if (pGPIOConfig->GPIOx == GPIOB) {
+    else if (pGPIOConfig->GPIOx == GPIOB) { // initialize GPIO port B
         if (pGPIOConfig->GPIO_pin_dir == GPIO_OUT) {
             GPIO_PORTB_DIR_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
@@ -80,7 +80,7 @@ void GPIO_init(GPIO_config_t *pGPIOConfig) {
 
         GPIO_PORTB_DEN_R |= (1 << pGPIOConfig->GPIO_pin_num);
     }
-    else if (pGPIOConfig->GPIOx == GPIOC) {
+    else if (pGPIOConfig->GPIOx == GPIOC) { // initialize GPIO port C
         if (pGPIOConfig->GPIO_pin_dir == GPIO_OUT) {
             GPIO_PORTC_DIR_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
@@ -105,7 +105,7 @@ void GPIO_init(GPIO_config_t *pGPIOConfig) {
 
         GPIO_PORTC_DEN_R |= (1 << pGPIOConfig->GPIO_pin_num);
     }
-    else if (pGPIOConfig->GPIOx == GPIOD) {
+    else if (pGPIOConfig->GPIOx == GPIOD) { // initialize GPIO port D
         if (pGPIOConfig->GPIO_pin_dir == GPIO_OUT) {
             GPIO_PORTD_DIR_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
@@ -130,7 +130,7 @@ void GPIO_init(GPIO_config_t *pGPIOConfig) {
 
         GPIO_PORTD_DEN_R |= (1 << pGPIOConfig->GPIO_pin_num);
     }
-    else if (pGPIOConfig->GPIOx == GPIOE) {
+    else if (pGPIOConfig->GPIOx == GPIOE) { // initialize GPIO port E
         if (pGPIOConfig->GPIO_pin_dir == GPIO_OUT) {
             GPIO_PORTE_DIR_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
@@ -155,7 +155,7 @@ void GPIO_init(GPIO_config_t *pGPIOConfig) {
 
         GPIO_PORTE_DEN_R |= (1 << pGPIOConfig->GPIO_pin_num);
     }
-    else if (pGPIOConfig->GPIOx == GPIOF) {
+    else if (pGPIOConfig->GPIOx == GPIOF) { // initialize GPIO port F
         if (pGPIOConfig->GPIO_pin_dir == GPIO_OUT) {
             GPIO_PORTF_DIR_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
@@ -206,7 +206,7 @@ uint8_t GPIO_read_pin(GPIO_config_t *pGPIOConfig) {
 }
 
 void GPIO_write_pin(GPIO_config_t *pGPIOConfig, uint8_t high_low) {
-    if (high_low == GPIO_PIN_HIGH) {
+    if (high_low == GPIO_PIN_HIGH) { // make the specified pin high
         if (pGPIOConfig->GPIOx == GPIOA) {
             GPIO_PORTA_DATA_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
@@ -226,7 +226,7 @@ void GPIO_write_pin(GPIO_config_t *pGPIOConfig, uint8_t high_low) {
             GPIO_PORTF_DATA_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
     }
-    else if (high_low == GPIO_PIN_LOW) {
+    else if (high_low == GPIO_PIN_LOW) { // make the specified pin low
         if (pGPIOConfig->GPIOx == GPIOA) {
             GPIO_PORTA_DATA_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
@@ -250,13 +250,13 @@ void GPIO_write_pin(GPIO_config_t *pGPIOConfig, uint8_t high_low) {
 
 void GPIO_interrupt_config(GPIO_config_t *pGPIOConfig, uint8_t edge_level_sensitive, uint8_t edge_level_trigger) {
     if (pGPIOConfig->GPIOx == GPIOA) {
-        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) {
+        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) { // set whether the interrupt is edge sensitive or level sensitive
             GPIO_PORTA_IS_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
             GPIO_PORTA_IS_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
-        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) {
+        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) { // set whether the interrupt is low level/falling edge triggered or high level/rising edge triggered
             GPIO_PORTA_IEV_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
@@ -267,13 +267,13 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIOConfig, uint8_t edge_level_sensit
         NVIC_EN0_R |= (1 << 0); // enable interrupts for PORTA
     }
     else if (pGPIOConfig->GPIOx == GPIOB) {
-        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) {
+        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) { // set whether the interrupt is edge sensitive or level sensitive
             GPIO_PORTB_IS_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
             GPIO_PORTB_IS_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
-        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) {
+        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) { // set whether the interrupt is low level/falling edge triggered or high level/rising edge triggered
             GPIO_PORTB_IEV_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
@@ -284,13 +284,13 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIOConfig, uint8_t edge_level_sensit
         NVIC_EN0_R |= (1 << 1); // enable interrupts for PORTB
     }
     else if (pGPIOConfig->GPIOx == GPIOC) {
-        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) {
+        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) { // set whether the interrupt is edge sensitive or level sensitive
             GPIO_PORTC_IS_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
             GPIO_PORTC_IS_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
-        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) {
+        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) { // set whether the interrupt is low level/falling edge triggered or high level/rising edge triggered
             GPIO_PORTC_IEV_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
@@ -301,13 +301,13 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIOConfig, uint8_t edge_level_sensit
         NVIC_EN0_R |= (1 << 2); // enable interrupts for PORTC
     }
     else if (pGPIOConfig->GPIOx == GPIOD) {
-        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) {
+        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) { // set whether the interrupt is edge sensitive or level sensitive
             GPIO_PORTD_IS_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
             GPIO_PORTD_IS_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
-        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) {
+        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) { // set whether the interrupt is low level/falling edge triggered or high level/rising edge triggered
             GPIO_PORTD_IEV_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
@@ -318,13 +318,13 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIOConfig, uint8_t edge_level_sensit
         NVIC_EN0_R |= (1 << 3); // enable interrupts for PORTD
     }
     else if (pGPIOConfig->GPIOx == GPIOE) {
-        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) {
+        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) { // set whether the interrupt is edge sensitive or level sensitive
             GPIO_PORTE_IS_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
             GPIO_PORTE_IS_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
-        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) {
+        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) { // set whether the interrupt is low level/falling edge triggered or high level/rising edge triggered
             GPIO_PORTE_IEV_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
@@ -336,13 +336,13 @@ void GPIO_interrupt_config(GPIO_config_t *pGPIOConfig, uint8_t edge_level_sensit
     }
     else if (pGPIOConfig->GPIOx == GPIOF) {
         NVIC_EN0_R &= ~(1 << 30); // disabling the interrupts on this port before enabling another
-        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) {
+        if (edge_level_sensitive == GPIO_EDGE_SENSITIVE) { // set whether the interrupt is edge sensitive or level sensitive
             GPIO_PORTF_IS_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {
             GPIO_PORTF_IS_R |= (1 << pGPIOConfig->GPIO_pin_num);
         }
-        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) {
+        if (edge_level_trigger == GPIO_LOW_FALLING_TRIGGER) { // set whether the interrupt is low level/falling edge triggered or high level/rising edge triggered
             GPIO_PORTF_IEV_R &= ~(1 << pGPIOConfig->GPIO_pin_num);
         }
         else {

@@ -179,19 +179,19 @@ void SPI_ss_control(uint8_t port, uint8_t pin, uint8_t high_low) {
             GPIO_PORTA_DATA_R &= ~(1 << pin); // assert SS low
         }
         else if (port == SPI_SS_PORT_B) {
-            GPIO_PORTB_DATA_R &= ~(1 << pin);
+            GPIO_PORTB_DATA_R &= ~(1 << pin); // assert SS low
         }
         else if (port == SPI_SS_PORT_C) {
-            GPIO_PORTC_DATA_R &= ~(1 << pin);
+            GPIO_PORTC_DATA_R &= ~(1 << pin); // assert SS low
         }
         else if (port == SPI_SS_PORT_D) {
-            GPIO_PORTD_DATA_R &= ~(1 << pin);
+            GPIO_PORTD_DATA_R &= ~(1 << pin); // assert SS low
         }
         else if (port == SPI_SS_PORT_E) {
-            GPIO_PORTE_DATA_R &= ~(1 << pin);
+            GPIO_PORTE_DATA_R &= ~(1 << pin); // assert SS low
         }
         else if (port == SPI_SS_PORT_F) {
-            GPIO_PORTF_DATA_R &= ~(1 << pin);
+            GPIO_PORTF_DATA_R &= ~(1 << pin); // assert SS low
         }
     }
     else {
@@ -199,19 +199,19 @@ void SPI_ss_control(uint8_t port, uint8_t pin, uint8_t high_low) {
             GPIO_PORTA_DATA_R |= (1 << pin); // assert SS high
         }
         else if (port == SPI_SS_PORT_B) {
-            GPIO_PORTB_DATA_R |= (1 << pin);
+            GPIO_PORTB_DATA_R |= (1 << pin); // assert SS high
         }
         else if (port == SPI_SS_PORT_C) {
-            GPIO_PORTC_DATA_R |= (1 << pin);
+            GPIO_PORTC_DATA_R |= (1 << pin); // assert SS high
         }
         else if (port == SPI_SS_PORT_D) {
-            GPIO_PORTD_DATA_R |= (1 << pin);
+            GPIO_PORTD_DATA_R |= (1 << pin); // assert SS high
         }
         else if (port == SPI_SS_PORT_E) {
-            GPIO_PORTE_DATA_R |= (1 << pin);
+            GPIO_PORTE_DATA_R |= (1 << pin); // assert SS high
         }
         else if (port == SPI_SS_PORT_F) {
-            GPIO_PORTF_DATA_R |= (1 << pin);
+            GPIO_PORTF_DATA_R |= (1 << pin); // assert SS high
         }
     }
 }
@@ -239,7 +239,7 @@ void SPI_write_byte(SPI_config_t *pSPIConfig, uint8_t data, uint8_t ss_port, uin
         while(SSI3_SR_R & 0x10); // wait until transmit is complete
     }
     if (release) {
-        SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH);
+        SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH); // make the slave select pin high again
     }
 }
 
@@ -277,7 +277,7 @@ void SPI_write_string(SPI_config_t *pSPIConfig, char* data, uint8_t ss_port, uin
             while(SSI3_SR_R & 0x10); // wait until transmit is complete
         }
     }
-    SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH);
+    SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH); // make the slave select pin high again
 }
 
 void SPI_read_byte(SPI_config_t *pSPIConfig, uint8_t* read_buffer, uint8_t ss_port, uint8_t ss_pin, uint8_t release) {
@@ -305,11 +305,11 @@ void SPI_read_byte(SPI_config_t *pSPIConfig, uint8_t* read_buffer, uint8_t ss_po
 
 
     if (release) {
-        SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH);
+        SPI_ss_control(ss_port, ss_pin, SPI_SS_HIGH); // make the slave select pin high again
     }
 }
 
-void SPI_delay(uint16_t time_ms) {
+void SPI_delay(uint16_t time_ms) { // delay for the time specified (in ms)
     uint16_t i, j;
     for(i = 0 ; i < time_ms; i++)
         for(j = 0; j < 3180; j++)

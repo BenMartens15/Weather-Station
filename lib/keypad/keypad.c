@@ -8,8 +8,8 @@
 #include "keypad.h"
 #include <string.h>
 
-static GPIO_config_t keypad_columns;
-static GPIO_config_t keypad_rows;
+static GPIO_config_t keypad_columns; // the keypad column GPIOs
+static GPIO_config_t keypad_rows; // the keypad row GPIOs
 static uint8_t column_port;
 static uint8_t column_pins[3];
 static uint8_t row_port;
@@ -155,6 +155,11 @@ uint8_t keypad_check_key() {
     }
     return 13;
 }
+
+
+/*
+ * GPIO interrupt handlers
+ */
 
 void GPIO_porta_handler() {
     GPIO_PORTA_IM_R &= ~(1 << column_pins[0]); // mask the interrupts to prevent firing multiple times

@@ -13,11 +13,14 @@ static uint8_t baro_ss_port;
 static uint8_t baro_ss_pin;
 static SPI_config_t baro_sensor;
 static uint8_t coefficients_hex[8];
+
+// coefficients used to calculate the barometric pressure
 static float a0;
 static float b1;
 static float b2;
 static float c12;
 
+// the procedure for initializing the sensor was taken from the device datasheet
 void baro_sensor_init(uint8_t SPIx, uint8_t ss_port, uint8_t ss_pin) {
     baro_sensor.SPIx = SPIx;
     baro_sensor.SPI_device_mode = SPI_DEVICE_MODE_MASTER;
@@ -74,6 +77,7 @@ void baro_sensor_init(uint8_t SPIx, uint8_t ss_port, uint8_t ss_pin) {
     coefficients_to_dec();
 }
 
+// this function converts the binary coefficients read from the sensor to the proper signed floating point decimal numbers according the datasheet
 void coefficients_to_dec() {
     uint16_t binary_coeff;
 

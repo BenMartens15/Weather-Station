@@ -11,8 +11,13 @@
 #include <stdint.h>
 #include "repo/lib/drivers/gpio_driver.h"
 
+// returns the value of a variable storing which key was pressed
 uint8_t get_keypad_key_pressed();
+
+// initialize the GPIOs for the keypad
 void keypad_init(uint8_t column_port, uint8_t row_port, uint8_t* column_pins, uint8_t* row_pins);
+
+// check which key has been pressed (called from the interrupt handlers)
 uint8_t keypad_check_key();
 
 void GPIO_porta_handler();
